@@ -1,0 +1,22 @@
+IndiaStay booking date validation fix
+
+This patch contains ONLY two changed source files:
+- backend/routes/admin.js
+- admin/admin.js
+
+No database, .env, credentials, or other project files are included.
+
+Apply:
+1. Stop the running backend in VS Code with Ctrl+C.
+2. Extract this ZIP into your existing IndiaStay project root (the folder that contains backend, admin, index.html).
+3. Allow the two files to overwrite the existing files.
+4. In the backend terminal, run: npm start
+5. Refresh the admin page with Ctrl+F5.
+
+Rules:
+- Checked In: allowed only on/after check-in date.
+- Completed: allowed only on/after check-out date.
+- No Show: allowed only after the check-in calendar date has passed.
+- Cancellation/refund logic is unchanged.
+
+The backend is authoritative; the UI also hides actions that are not yet allowed.

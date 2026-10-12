@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>IndiaStay — Hotels &amp; Reviews Across India</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<!-- ===================== NAVBAR ===================== -->
+<header class="navbar">
+  <div class="navbar-inner">
+    <a href="#" class="brand" data-nav="home">
+      <span class="brand-seal">IS</span>
+      <span class="brand-text">India<em>Stay</em></span>
+    </a>
+    <nav class="nav-links">
+      <a href="#" data-nav="home">Home</a>
+      <a href="#" data-nav="listings">Hotels</a>
+      <a href="#" data-nav="about">About India</a>
+      <a href="#" data-nav="bookings" class="requires-auth hidden">My Bookings</a>
+    </nav>
+    <div class="nav-auth">
+      <div id="loggedOutBox">
+        <button class="btn btn-ghost" data-action="open-login">Log in</button>
+        <button class="btn btn-primary" data-action="open-signup">Sign up</button>
+      </div>
+      <div id="loggedInBox" class="hidden">
+        <span class="user-chip">👋 <span id="navUserName">Guest</span></span>
+        <button class="btn btn-ghost" data-action="logout">Log out</button>
+      </div>
+    </div>
+    <button class="hamburger" id="hamburgerBtn" aria-label="Menu">☰</button>
+  </div>
+</header>
+
+<main id="app">
+
+  <!-- ===================== HOME / HERO ===================== -->
+  <section id="view-home" class="view">
+    <div class="hero">
+      <div class="hero-badge">🇮🇳 Trusted by travellers in 24 cities</div>
+      <h1 class="hero-title">Stay closer to <em>real India</em><br> in every city.</h1>
+      <p class="hero-sub">Handpicked hotels near the places that make each city worth visiting — booked and reviewed by real travellers, from Jaipur's havelis to Goa's beaches.</p>
+
+      <form class="search-card" id="searchForm">
+        <div class="search-field">
+          <label for="searchCity">City</label>
+          <select id="searchCity">
+            <option value="">Anywhere in India</option>
+          </select>
+        </div>
+        <div class="search-field">
+          <label for="checkIn">Check-in</label>
+          <input type="date" id="checkIn">
+        </div>
+        <div class="search-field">
+          <label for="checkOut">Check-out</label>
+          <input type="date" id="checkOut">
+        </div>
+        <div class="search-field">
+          <label for="guestCount">Guests</label>
+          <input type="number" id="guestCount" min="1" max="10" value="2">
+        </div>
+        <button type="submit" class="btn btn-primary btn-search">Find stays</button>
+      </form>
+    </div>
+
+    <section class="strip">
+      <div class="strip-item">
+        <span class="strip-num">140+</span>
+        <span class="strip-label">verified guest reviews</span>
+      </div>
+      <div class="strip-item">
+        <span class="strip-num">24</span>
+        <span class="strip-label">cities across India</span>
+      </div>
+      <div class="strip-item">
+        <span class="strip-num">96</span>
+        <span class="strip-label">hotels to choose from</span>
+      </div>
+    </section>
+
+    <section class="section-block">
+      <div class="section-head">
+        <h2>Popular right now</h2>
+        <a href="#" data-nav="listings" class="see-all">See all hotels →</a>
+      </div>
+      <div class="hotel-grid" id="featuredGrid"></div>
+    </section>
+
+    <section class="about-teaser" data-nav="about">
+      <div class="about-teaser-text">
+        <span class="eyebrow">Why IndiaStay</span>
+        <h2>One country, a thousand reasons to stay a little longer.</h2>
+        <p>From havelis in Jaipur to backwater stays in Kerala, we list hotels close to the heritage, food and culture that make each Indian city worth the trip — not just the ones nearest the airport.</p>
+        <a href="#" data-nav="about" class="btn btn-outline">Read the India guide</a>
+      </div>
+    </section>
+  </section>
+
+  <!-- ===================== LISTINGS ===================== -->
+  <section id="view-listings" class="view hidden">
+    <div class="listings-head">
+      <h1>Hotels across India</h1>
+      <p id="listingsCount" class="muted"></p>
+    </div>
+    <div class="listings-layout">
+      <aside class="filters">
+        <h3>Filter</h3>
+        <label class="filter-label">City</label>
+        <select id="filterCity">
+          <option value="">All cities</option>
+        </select>
+        <label class="filter-label">Max price / night</label>
+        <input type="range" id="filterPrice" min="800" max="8000" step="100" value="8000">
+        <div class="range-value">Up to ₹<span id="filterPriceVal">8000</span></div>
+        <label class="filter-label">Minimum rating</label>
+        <select id="filterRating">
+          <option value="0">Any rating</option>
+          <option value="3">3★ &amp; up</option>
+          <option value="4">4★ &amp; up</option>
+          <option value="4.5">4.5★ &amp; up</option>
+        </select>
+        <label class="filter-label">Sort by</label>
+        <select id="sortBy">
+          <option value="rating">Highest rated</option>
+          <option value="price-asc">Price: low to high</option>
+          <option value="price-desc">Price: high to low</option>
+        </select>
+      </aside>
+      <div class="hotel-grid" id="listingsGrid"></div>
+    </div>
+  </section>
+
+  <!-- ===================== HOTEL DETAIL ===================== -->
+  <section id="view-hotel" class="view hidden">
+    <div id="hotelDetailContent"></div>
+  </section>
+
+  <!-- ===================== ABOUT INDIA ===================== -->
+  <section id="view-about" class="view hidden">
+    <div class="about-page">
+      <span class="eyebrow">India guide</span>
+      <h1>Travel India, city by city</h1>
+      <p class="lead">Eight cities, eight completely different reasons to visit — heritage, food, coastline and mountains, all in one country.</p>
+
+      <div class="about-grid">
+        <div class="about-card">
+          <h3>🏰 Heritage cities</h3>
+          <p>Jaipur's pink sandstone havelis, Varanasi's ghats at dawn, Udaipur's lake palaces — India's heritage cities reward slow mornings and a hotel close enough to walk to the old town.</p>
+        </div>
+        <div class="about-card">
+          <h3>🍽️ Food worth flying for</h3>
+          <p>Every city here has a dish it's known for — Indori poha-jalebi, Mumbai's vada pav, Amritsari kulcha. Staying near the old city or main bazaar usually means staying near the best of it.</p>
+        </div>
+        <div class="about-card">
+          <h3>🏖️ Coast &amp; mountains</h3>
+          <p>Goa's beaches and Manali's mountain air sit at opposite ends of the map and opposite ends of the itinerary — book early in peak season for either.</p>
+        </div>
+        <div class="about-card">
+          <h3>🚕 Getting around</h3>
+          <p>Most hotels listed here sit within 20 minutes of a major railway station or airport, with app cabs and auto-rickshaws covering the rest in every city.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== MY BOOKINGS ===================== -->
+  <section id="view-bookings" class="view hidden">
+    <h1>My bookings</h1>
+    <div id="bookingsList" class="bookings-list"></div>
+  </section>
+
+</main>
+
+<footer class="site-footer">
+  <p>IndiaStay — a student project. Hotel data is illustrative, not real listings.</p>
+</footer>
+
+<!-- ===================== MODALS ===================== -->
+<div class="modal-overlay hidden" id="loginModal">
+  <div class="modal">
+    <button class="modal-close" data-action="close-modal">&times;</button>
+    <h2>Welcome back</h2>
+    <p class="muted">Log in to book stays and leave reviews.</p>
+    <form id="loginForm">
+      <label>Email</label>
+      <input type="email" id="loginEmail" required>
+      <label>Password</label>
+      <input type="password" id="loginPassword" required>
+      <p class="form-error hidden" id="loginError"></p>
+      <button type="submit" class="btn btn-primary btn-block">Log in</button>
+    </form>
+    <p class="modal-switch">New here? <a href="#" data-action="switch-signup">Create an account</a></p>
+  </div>
+</div>
+
+<div class="modal-overlay hidden" id="signupModal">
+  <div class="modal">
+    <button class="modal-close" data-action="close-modal">&times;</button>
+    <h2>Create your account</h2>
+    <p class="muted">Takes ten seconds. No spam, promise.</p>
+    <form id="signupForm">
+      <label>Full name</label>
+      <input type="text" id="signupName" required>
+      <label>Email</label>
+      <input type="email" id="signupEmail" required>
+      <label>Password</label>
+      <input type="password" id="signupPassword" required minlength="4">
+      <p class="form-error hidden" id="signupError"></p>
+      <button type="submit" class="btn btn-primary btn-block">Sign up</button>
+    </form>
+    <p class="modal-switch">Already have an account? <a href="#" data-action="switch-login">Log in</a></p>
+  </div>
+</div>
+
+<div class="modal-overlay hidden" id="bookingModal">
+  <div class="modal">
+    <button class="modal-close" data-action="close-modal">&times;</button>
+    <h2>Confirm your booking</h2>
+    <form id="bookingForm">
+      <input type="hidden" id="bookingHotelId">
+      <label>Check-in</label>
+      <input type="date" id="bookingCheckIn" required>
+      <label>Check-out</label>
+      <input type="date" id="bookingCheckOut" required>
+      <label>Room type</label>
+      <select id="bookingRoomType" required></select>
+      <p class="muted" id="roomTypeInfo" style="margin:.35rem 0 .8rem;font-size:.82rem;"></p>
+      <label>Rooms</label>
+      <input type="number" id="bookingRooms" min="1" max="5" value="1">
+      <p class="availability-note hidden" id="bookingAvailabilityNote"></p>
+      <label>Guests</label>
+      <input type="number" id="bookingGuests" min="1" max="10" value="2">
+      <div class="booking-total">
+        <span>Estimated total</span>
+        <strong id="bookingTotal">₹0</strong>
+      </div>
+      <fieldset class="payment-choice">
+        <legend>Payment</legend>
+        <label><input type="radio" name="paymentMethod" value="online" checked> Pay securely online</label>
+        <label><input type="radio" name="paymentMethod" value="later"> Reserve now, pay later</label>
+        <p class="muted" style="font-size:.78rem;margin:.35rem 0 0;">Your payment is collected now. After successful payment, your booking is sent to the hotel for approval.</p>
+      </fieldset>
+      <p class="form-error hidden" id="bookingError"></p>
+      <button type="submit" class="btn btn-primary btn-block" id="bookingSubmitBtn">Proceed to secure payment</button>
+    </form>
+  </div>
+</div>
+
+
+<div class="modal-overlay hidden demo-payment-overlay" id="demoPaymentModal">
+  <div class="demo-payment-modal">
+    <input type="hidden" id="demoPaymentBookingId">
+    <button class="modal-close" type="button" onclick="closeDemoPayment()">&times;</button>
+    <div class="demo-payment-brand"><span>India</span>Stay <small>DEMO PAY</small></div>
+    <div id="demoPaymentStep1">
+      <p class="demo-eyebrow">SECURE CHECKOUT · TEST MODE</p>
+      <h2>Complete your payment</h2>
+      <div class="demo-payment-summary">
+        <div><span>Hotel</span><strong id="demoPaymentHotel">IndiaStay booking</strong></div>
+        <div><span>Amount</span><strong id="demoPaymentAmount">₹0</strong></div>
+      </div>
+      <p class="demo-label">Choose a payment method</p>
+      <div class="demo-pay-methods">
+        <button type="button" class="demo-pay-method selected" data-method="upi" onclick="selectDemoPaymentMethod(this)"><b>UPI</b><small>Google Pay · PhonePe · BHIM</small></button>
+        <button type="button" class="demo-pay-method" data-method="card" onclick="selectDemoPaymentMethod(this)"><b>Card</b><small>Credit / Debit Card</small></button>
+        <button type="button" class="demo-pay-method" data-method="netbanking" onclick="selectDemoPaymentMethod(this)"><b>Net Banking</b><small>All major banks</small></button>
+      </div>
+      <div class="demo-security-note">🔒 Secure demo checkout · No real money is charged</div>
+      <button type="button" id="demoPayButton" class="btn btn-primary btn-block demo-pay-button" onclick="completeDemoPayment()">Pay now</button>
+      <p class="demo-disclaimer">Simulated payment gateway for the IndiaStay college project. Do not enter real card numbers, OTPs or UPI PINs.</p>
+      <p class="form-error hidden" id="demoPaymentError"></p>
+    </div>
+    <div id="demoPaymentStep2" class="hidden demo-processing">
+      <div class="demo-loader"></div><p class="demo-eyebrow">DEMO PAYMENT</p><h2>Processing payment…</h2>
+      <p>Please wait while we securely process your test transaction.</p><div class="demo-progress"><span></span></div>
+    </div>
+    <div id="demoPaymentStep3" class="hidden demo-success">
+      <div class="demo-check">✓</div><p class="demo-eyebrow">PAYMENT SUCCESSFUL</p><h2>Payment received</h2>
+      <p>Your demo payment was successful. Your booking has been sent to the hotel for approval.</p>
+      <div class="demo-success-box"><span>Transaction ID</span><strong id="demoTransactionId">DEMO-PAYMENT</strong><span>Booking status</span><strong class="demo-pending">Pending Approval</strong></div>
+      <button type="button" class="btn btn-primary btn-block" onclick="closeDemoPayment()">Done</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast hidden" id="toast"></div>
+
+<script src="js/data.js"></script>
+<script src="js/app.js"></script>
+</body>
+</html>

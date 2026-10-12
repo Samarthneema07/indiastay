@@ -1,0 +1,10 @@
+backend/node_modules/
+backend/.env
+backend/db/*.db-shm
+backend/db/*.db-wal
+*.log
+.DS_Store
+node_modules/
+**/node_modules/
+backend/db/*.db
+/backend/db/indiastay.db
