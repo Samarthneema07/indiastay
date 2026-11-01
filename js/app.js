@@ -5,7 +5,7 @@
 // locally in the browser.
 // ============================================================
 
-const API_BASE = "http://localhost:4000/api";
+const API_BASE = "/api";
 const STORAGE_KEYS = { session: "indiastay_session" };
 let apiOnline = false;
 
