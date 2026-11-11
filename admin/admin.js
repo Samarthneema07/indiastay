@@ -1,4 +1,4 @@
-const API="http://localhost:4000/api", KEY="indiastay_admin_session";
+const API="/api", KEY="indiastay_admin_session";
 let session=null, me=null;
 const $=s=>document.querySelector(s), esc=s=>{const d=document.createElement("div");d.textContent=s??"";return d.innerHTML};
 async function api(path,opt={}){const h={"Content-Type":"application/json",...(opt.headers||{})};if(session?.token)h.Authorization="Bearer "+session.token;const r=await fetch(API+path,{...opt,headers:h});let d={};try{d=await r.json()}catch{}if(!r.ok)throw Error(d.error||`Request failed (${r.status})`);return d}
